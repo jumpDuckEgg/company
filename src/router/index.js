@@ -29,7 +29,7 @@ export const constantRouterMap = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    name: 'Dashboard',
+    name: 'zhuye',
     hidden: true,
     children: [{
       path: 'dashboard',
@@ -42,6 +42,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
+    hidden: true,
     meta: { title: 'Example', icon: 'example' },
     children: [
       {
@@ -58,10 +59,70 @@ export const constantRouterMap = [
       }
     ]
   },
-
+  {
+    path: '/home',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'home',
+        component: () => import('@/views/home/index'),
+        meta: { title: '首页配置', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/production',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'production',
+        component: () => import('@/views/production/index'),
+        meta: { title: '产品配置', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/about',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'about',
+        component: () => import('@/views/about/index'),
+        meta: { title: '关于我们配置', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/contact',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'contact',
+        component: () => import('@/views/contact/index'),
+        meta: { title: '联系我们配置', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/user',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'user',
+        component: () => import('@/views/user/index'),
+        meta: { title: '用户配置', icon: 'form' }
+      }
+    ]
+  },
   {
     path: '/form',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: 'index',
@@ -71,7 +132,6 @@ export const constantRouterMap = [
       }
     ]
   },
-
   { path: '*', redirect: '/404', hidden: true }
 ]
 

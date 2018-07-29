@@ -1,8 +1,11 @@
 <template>
   <div class="app-wrapper" :class="{hideSidebar:!sidebar.opened}">
+     <navbar style="position: fixed;
+    top: 0;
+    left: 0;
+    width:100%;z-index:1000"></navbar>
     <sidebar class="sidebar-container"></sidebar>
-    <div class="main-container">
-      <navbar></navbar>
+    <div class="main-container" style="margin-top:50px;">
       <app-main></app-main>
     </div>
   </div>
