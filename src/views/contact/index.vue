@@ -91,17 +91,17 @@
           <el-col>
             <el-col :span="8">
               <el-form-item label="系统logo:">
-                <upload v-bind="logoData" :materialfileList.sync='logoData.materialfileList' :buttonFlag.sync='logoData.buttonFlag'></upload>
+                <upload v-bind="logoData" key="logoData" :materialfileList.sync='logoData.materialfileList' :buttonFlag.sync='logoData.buttonFlag'></upload>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="专题图片:">
-                <upload v-bind="specialData" :materialfileList.sync='specialData.materialfileList' :buttonFlag.sync='specialData.buttonFlag'></upload>
+                <upload v-bind="specialData" key="specialData" :materialfileList.sync='specialData.materialfileList' :buttonFlag.sync='specialData.buttonFlag'></upload>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="二维码:">
-                <upload v-bind="wechatData" :materialfileList.sync='wechatData.materialfileList' :buttonFlag.sync='wechatData.buttonFlag'></upload>
+                <upload v-bind="wechatData" key="wechatData" :materialfileList.sync='wechatData.materialfileList' :buttonFlag.sync='wechatData.buttonFlag'></upload>
               </el-form-item>
             </el-col>
             </el-form-item>
@@ -157,150 +157,182 @@ import test from "@/assets/404_images/404.png";
 import { getCompanyInfo, modifyCompanyInfo } from "@/api/contact.js";
 import SERVER from "@/api/config";
 export default {
-  components: {
-    upload,
-    wangEditor
-  },
-  data() {
-    return {
-      currentData: {
-        name: "",
-        logo: "",
-        contactor: "",
-        pictureId: "",
-        contactPhone: "",
-        contactMobilePhone: "",
-        contactWechatNo: "",
-        contactWechatPath: "",
-        contactEmail: "",
-        postCode: "",
-        longitude: 0,
-        latitude: 0,
-        address: "",
-        openTime: "0",
-        description: ""
-      },
-      imgDialogVisible: false,
-      templateImg: test,
-      modifyDialogVisible: false,
-      form: {
-        name: "",
-        logo: "",
-        contactor: "",
-        pictureId: "",
-        contactPhone: "",
-        contactMobilePhone: "",
-        contactWechatNo: "",
-        contactWechatPath: "",
-        contactEmail: "",
-        postCode: "",
-        longitude: 0,
-        latitude: 0,
-        address: "",
-        openTime: "0",
-        description: ""
-      },
-      logoData: {
-        uploadFolder: "一般图片",
-        materialfileList: [],
-        limitFlieNumber: 3,
-        buttonFlag: false
-      },
-      specialData: {
-        uploadFolder: "一般图片",
-        materialfileList: [],
-        limitFlieNumber: 3,
-        buttonFlag: false
-      },
-      wechatData: {
-        uploadFolder: "一般图片",
-        materialfileList: [],
-        limitFlieNumber: 3,
-        buttonFlag: false
-      }
-    };
-  },
-  created() {
-    getCompanyInfo().then(res => {
-      if (res.success) {
-        this.currentData = this.form = res.result;
-      } else {
-        this.$message({
-          type: "error",
-          message: res.errorInfos[0].msg
-        });
-      }
-    });
-  },
-  methods: {
-    openImgDialog() {
-      this.imgDialogVisible = true;
+    components: {
+        upload,
+        wangEditor
     },
-    openModifyDialog() {
-      this.modifyDialogVisible = true;
+    data() {
+        return {
+            currentData: {
+                name: "",
+                logo: "",
+                contactor: "",
+                pictureId: "",
+                contactPhone: "",
+                contactMobilePhone: "",
+                contactWechatNo: "",
+                contactWechatPath: "",
+                contactEmail: "",
+                postCode: "",
+                longitude: 0,
+                latitude: 0,
+                address: "",
+                openTime: "0",
+                description: ""
+            },
+            imgDialogVisible: false,
+            templateImg: test,
+            modifyDialogVisible: false,
+            form: {
+                name: "",
+                logo: "",
+                contactor: "",
+                pictureId: "",
+                contactPhone: "",
+                contactMobilePhone: "",
+                contactWechatNo: "",
+                contactWechatPath: "",
+                contactEmail: "",
+                postCode: "",
+                longitude: 0,
+                latitude: 0,
+                address: "",
+                openTime: "0",
+                description: ""
+            },
+            logoData: {
+                uploadFolder: "一般图片",
+                materialfileList: [],
+                limitFlieNumber: 1,
+                buttonFlag: false,
+                imgUrl:''
+            },
+            specialData: {
+                uploadFolder: "一般图片",
+                materialfileList: [],
+                limitFlieNumber: 1,
+                buttonFlag: false,
+                imgUrl:''
+            },
+            wechatData: {
+                uploadFolder: "一般图片",
+                materialfileList: [],
+                limitFlieNumber: 1,
+                buttonFlag: false,
+                imgUrl:""
+            }
+        };
     },
-    submitInfo() {
-      this.$confirm("此操作将提交信息, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          let submitInfoData = this.form;
-          if(this.logoData.materialfileList.length>0){
-            submitInfoData.logo = SERVER.BASE_URL + "/file/get?id=" +this.logoData.materialfileList[0].respone.result
-          }
-          if(this.specialData.materialfileList.length>0){
-            submitInfoData.pictureId = SERVER.BASE_URL + "/file/get?id=" +this.specialData.materialfileList[0].respone.result
-          }
-          if(this.wechatData.materialfileList.length>0){
-            submitInfoData.contactWechatPath = SERVER.BASE_URL + "/file/get?id=" +this.wechatData.materialfileList[0].respone.result
-          }
-          submitInfoData.description = this.$refs.wangEditor.editorContent;
-          modifyCompanyInfo(submitInfoData).then(res => {
-            console.log(res);
-          });
-          // console.log(this.$refs.wangEditor.editorContent);
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消提交"
-          });
+    created() {
+        getCompanyInfo().then(res => {
+            if (res.success) {
+                this.currentData = this.form = res.result;
+                this.logoData.materialfileList.push({
+                    name: "系统logo",
+                    url: SERVER.BASE_URL + "/file/upload?type=" + res.result.logo,
+                    response: {
+                        result: res.result.logo
+                    }
+                });
+                this.logoData.imgUrl = SERVER.BASE_URL + "/file/get?id=" + res.result.logo;
+                
+                this.specialData.materialfileList.push({
+                    name: "专题图片",
+                    url: SERVER.BASE_URL + "/file/get?id=" + res.result.pictureId,
+                    response: {
+                        result: res.result.pictureId
+                    }
+                });
+                this.specialData.imgUrl = SERVER.BASE_URL + "/file/get?id=" + res.result.pictureId;
+                this.wechatData.materialfileList.push({
+                    name: "微信二维码",
+                    url: SERVER.BASE_URL + "/file/get?id=" + res.result.contactWechatPath,
+                    response: {
+                        result: res.result.contactWechatPath
+                    }
+                });
+               this.wechatData.imgUrl = SERVER.BASE_URL + "/file/get?id=" + res.result.contactWechatPath;
+            } else {
+                this.$message({
+                    type: "error",
+                    message: res.errorInfos[0].msg
+                });
+            }
         });
+    },
+    methods: {
+        openImgDialog() {
+            this.imgDialogVisible = true;
+        },
+        openModifyDialog() {
+            this.modifyDialogVisible = true;
+        },
+        submitInfo() {
+            this.$confirm("此操作将提交信息, 是否继续?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            })
+                .then(() => {
+                    let submitInfoData = Object.assign({}, this.form);
+                    let logoData = this.logoData.materialfileList[0];
+                    if (this.logoData.materialfileList.length > 0) {
+                        submitInfoData.logo = logoData.response.result;
+                    }
+                    let specialData = this.specialData.materialfileList[0];
+                    if (this.specialData.materialfileList.length > 0) {
+                        submitInfoData.pictureId = specialData.response.result;
+                    }
+                    let wechatData = this.wechatData.materialfileList[0];
+                    if (this.wechatData.materialfileList.length > 0) {
+                        submitInfoData.contactWechatPath =
+                            wechatData.response.result;
+                    }
+                    submitInfoData.description = this.$refs.wangEditor.editorContent;
+
+                    modifyCompanyInfo(submitInfoData).then(res => {
+                        
+                    });
+                })
+                .catch(() => {
+                    this.$message({
+                        type: "info",
+                        message: "已取消提交"
+                    });
+                });
+        }
     }
-  }
 };
 </script>
 
 <style lang="scss" scoped>
 .content-title {
-  margin: 10px 0;
-  padding-left: 10px;
-  border-left: 5px solid rgb(64, 158, 255);
+    margin: 10px 0;
+    padding-left: 10px;
+    border-left: 5px solid rgb(64, 158, 255);
 }
 .content-box {
-  width: 96%;
-  margin: 0 auto;
-  border-bottom: 0;
-  &__item {
-    padding: 10px;
-    &-title {
-      color: #999;
+    width: 96%;
+    margin: 0 auto;
+    border-bottom: 0;
+    &__item {
+        padding: 10px;
+        &-title {
+            color: #999;
+        }
     }
-  }
 }
 .templateImg {
-  width: 100%;
+    width: 100%;
 }
 .modify-box {
 }
-.descriptionBox{
-  border: 1px solid #999;
-  height: 500px;
-  width: 100%;
-  overflow: scroll;
-  text-align: center;
+.descriptionBox {
+    border: 1px solid #999;
+    height: 500px;
+    width: 100%;
+    overflow: scroll;
+    text-align: center;
 }
 </style>
 
