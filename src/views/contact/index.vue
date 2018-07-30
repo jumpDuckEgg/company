@@ -205,62 +205,82 @@ export default {
                 materialfileList: [],
                 limitFlieNumber: 1,
                 buttonFlag: false,
-                imgUrl:''
+                imgUrl: ""
             },
             specialData: {
                 uploadFolder: "一般图片",
                 materialfileList: [],
                 limitFlieNumber: 1,
                 buttonFlag: false,
-                imgUrl:''
+                imgUrl: ""
             },
             wechatData: {
                 uploadFolder: "一般图片",
                 materialfileList: [],
                 limitFlieNumber: 1,
                 buttonFlag: false,
-                imgUrl:""
+                imgUrl: ""
             }
         };
     },
     created() {
-        getCompanyInfo().then(res => {
-            if (res.success) {
-                this.currentData = this.form = res.result;
-                this.logoData.materialfileList.push({
-                    name: "系统logo",
-                    url: SERVER.BASE_URL + "/file/upload?type=" + res.result.logo,
-                    response: {
-                        result: res.result.logo
-                    }
-                });
-                this.logoData.imgUrl = SERVER.BASE_URL + "/file/get?id=" + res.result.logo;
-                
-                this.specialData.materialfileList.push({
-                    name: "专题图片",
-                    url: SERVER.BASE_URL + "/file/get?id=" + res.result.pictureId,
-                    response: {
-                        result: res.result.pictureId
-                    }
-                });
-                this.specialData.imgUrl = SERVER.BASE_URL + "/file/get?id=" + res.result.pictureId;
-                this.wechatData.materialfileList.push({
-                    name: "微信二维码",
-                    url: SERVER.BASE_URL + "/file/get?id=" + res.result.contactWechatPath,
-                    response: {
-                        result: res.result.contactWechatPath
-                    }
-                });
-               this.wechatData.imgUrl = SERVER.BASE_URL + "/file/get?id=" + res.result.contactWechatPath;
-            } else {
-                this.$message({
-                    type: "error",
-                    message: res.errorInfos[0].msg
-                });
-            }
-        });
+      this.updateCompanyInfo();
     },
     methods: {
+        updateCompanyInfo() {
+            getCompanyInfo().then(res => {
+                if (res.success) {
+                    this.currentData = this.form = res.result;
+                    this.logoData.materialfileList.push({
+                        name: "系统logo",
+                        url:
+                            SERVER.BASE_URL +
+                            "/file/upload?type=" +
+                            res.result.logo,
+                        response: {
+                            result: res.result.logo
+                        }
+                    });
+                    this.logoData.imgUrl =
+                        SERVER.BASE_URL + "/file/get?id=" + res.result.logo;
+
+                    this.specialData.materialfileList.push({
+                        name: "专题图片",
+                        url:
+                            SERVER.BASE_URL +
+                            "/file/get?id=" +
+                            res.result.pictureId,
+                        response: {
+                            result: res.result.pictureId
+                        }
+                    });
+                    this.specialData.imgUrl =
+                        SERVER.BASE_URL +
+                        "/file/get?id=" +
+                        res.result.pictureId;
+                    this.wechatData.materialfileList.push({
+                        name: "微信二维码",
+                        url:
+                            SERVER.BASE_URL +
+                            "/file/get?id=" +
+                            res.result.contactWechatPath,
+                        response: {
+                            result: res.result.contactWechatPath
+                        }
+                    });
+                    this.wechatData.imgUrl =
+                        SERVER.BASE_URL +
+                        "/file/get?id=" +
+                        res.result.contactWechatPath;
+                } else {
+                    this.$message({
+                        type: "error",
+                        message: res.errorInfos[0].msg
+                    });
+                }
+            });
+        },
+
         openImgDialog() {
             this.imgDialogVisible = true;
         },
@@ -291,7 +311,18 @@ export default {
                     submitInfoData.description = this.$refs.wangEditor.editorContent;
 
                     modifyCompanyInfo(submitInfoData).then(res => {
-                        
+                        if (res.success) {
+                            this.$message({
+                                type: "success",
+                                message: "提交成功"
+                            });
+                            this.updateCompanyInfo();
+                        } else {
+                            this.$message({
+                                type: "error",
+                                message: "提交失败"
+                            });
+                        }
                     });
                 })
                 .catch(() => {
