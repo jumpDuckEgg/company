@@ -1,85 +1,168 @@
 <template>
   <div class="app-container">
-    <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="Activity name">
-        <el-input v-model="form.name"></el-input>
-      </el-form-item>
-      <el-form-item label="Activity zone">
-        <el-select v-model="form.region" placeholder="please select your zone">
-          <el-option label="Zone one" value="shanghai"></el-option>
-          <el-option label="Zone two" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Activity time">
-        <el-col :span="11">
-          <el-date-picker type="date" placeholder="Pick a date" v-model="form.date1" style="width: 100%;"></el-date-picker>
-        </el-col>
-        <el-col class="line" :span="2">-</el-col>
-        <el-col :span="11">
-          <el-time-picker type="fixed-time" placeholder="Pick a time" v-model="form.date2" style="width: 100%;"></el-time-picker>
-        </el-col>
-      </el-form-item>
-      <el-form-item label="Instant delivery">
-        <el-switch v-model="form.delivery"></el-switch>
-      </el-form-item>
-      <el-form-item label="Activity type">
-        <el-checkbox-group v-model="form.type">
-          <el-checkbox label="Online activities" name="type"></el-checkbox>
-          <el-checkbox label="Promotion activities" name="type"></el-checkbox>
-          <el-checkbox label="Offline activities" name="type"></el-checkbox>
-          <el-checkbox label="Simple brand exposure" name="type"></el-checkbox>
-        </el-checkbox-group>
-      </el-form-item>
-      <el-form-item label="Resources">
-        <el-radio-group v-model="form.resource">
-          <el-radio label="Sponsor"></el-radio>
-          <el-radio label="Venue"></el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="Activity form">
-        <el-input type="textarea" v-model="form.desc"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Create</el-button>
-        <el-button @click="onCancel">Cancel</el-button>
-      </el-form-item>
-    </el-form>
+    <el-row type="flex" justify="start">
+      <el-col>
+        <el-button size="mini" type="success" plain @click="openModifyDialog">修改关于我们</el-button>
+      </el-col>
+    </el-row>
+    <div class="content-title">
+      关于我们配置
+    </div>
+    <el-row class="content-box__item">
+      <el-col :span="8">
+        <span class="content-box__item-title">专题图片：</span>
+        <el-button type="small" @click="openImgDialog()">查看</el-button>
+      </el-col>
+    </el-row>
+    <el-row class="content-box__item">
+      <el-col :span="24">
+        <span class="content-box__item-title">详细信息：</span>
+        <div class="descriptionBox">
+          <div v-html="description"></div>
+        </div>
+      </el-col>
+    </el-row>
+    <el-dialog title="图片查看" :visible.sync="imgDialogVisible" center>
+      <img :src="templateImg" alt="" class="templateImg">
+    </el-dialog>
+    <el-dialog title="修改配置" :visible.sync="modifyDialogVisible" center top="40px" width="900px" :close-on-click-modal='false'>
+      <div class="modify-box">
+        <el-form ref="form" :model="form" label-width="80px">
+          <el-form-item label="专题图片:">
+            <upload v-bind="specialData" key="specialData" :materialfileList.sync='specialData.materialfileList' :buttonFlag.sync='specialData.buttonFlag'></upload>
+          </el-form-item>
+          <el-form-item label="详细信息:">
+            <wangEditor :parentsContent='form.description' ref="wangEditor" style="width:700px"></wangEditor>
+          </el-form-item>
+          <el-row style="text-align:center">
+            <el-button :disabled=' specialData.buttonFlag' @click="submitInfo">提交</el-button>
+          </el-row>
+        </el-form>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import upload from "@/components/UpLoad/index.vue";
+import wangEditor from "@/components/WangEditor/index.vue";
+import test from "@/assets/404_images/404.png";
+import { getAboutInfo, modifyAboutInfo } from "@/api/about.js";
+import SERVER from "@/api/config";
 export default {
+  components: {
+    upload,
+    wangEditor
+  },
   data() {
     return {
+      imgDialogVisible: false,
+      modifyDialogVisible: false,
+      templateImg: test,
+      pictureId: "",
+      description: "",
       form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        pictureId: "",
+        description: ""
+      },
+      specialData: {
+        uploadFolder: "一般图片",
+        materialfileList: [],
+        limitFlieNumber: 1,
+        buttonFlag: false,
+        imgUrl: ""
       }
-    }
+    };
+  },
+  created() {
+    this.updateAboutInfo();
   },
   methods: {
-    onSubmit() {
-      this.$message('submit!')
+    updateAboutInfo() {
+      getAboutInfo()
+        .then(res => {
+          this.form = res.result;
+          this.pictureId = res.result.pictureId;
+          this.description = res.result.description;
+          this.specialData.materialfileList = [];
+          this.specialData.materialfileList.push({
+            name: "专题图片",
+            url: SERVER.BASE_URL + "/file/get?id=" + res.result.pictureId,
+            response: {
+              result: res.result.pictureId
+            }
+          });
+          this.specialData.imgUrl =
+            SERVER.BASE_URL + "/file/get?id=" + res.result.pictureId;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
-    onCancel() {
-      this.$message({
-        message: 'cancel!',
-        type: 'warning'
+    openModifyDialog() {
+      this.modifyDialogVisible = true;
+    },
+    openImgDialog() {
+      this.templateImg = SERVER.BASE_URL + "/file/get?id=" + this.pictureId;
+      this.imgDialogVisible = true;
+    },
+    submitInfo() {
+      this.$confirm("此操作将提交信息, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       })
+        .then(() => {
+          let submitInfoData = Object.assign({}, this.form);
+          let specialData = this.specialData.materialfileList[0];
+          if (this.specialData.materialfileList.length > 0) {
+            submitInfoData.pictureId = specialData.response.result;
+          }
+          submitInfoData.description = this.$refs.wangEditor.editorContent;
+
+          modifyAboutInfo(submitInfoData).then(res => {
+            if (res.success) {
+              this.$message({
+                type: "success",
+                message: "提交成功"
+              });
+              this.updateAboutInfo();
+            } else {
+              this.$message({
+                type: "error",
+                message: "提交失败"
+              });
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消提交"
+          });
+        });
     }
   }
-}
+};
 </script>
 
-<style scoped>
-.line{
-  text-align: center;
+<style lang="scss" scoped>
+.content-title {
+  margin: 10px 0;
+  padding-left: 10px;
+  border-left: 5px solid rgb(64, 158, 255);
+}
+.templateImg {
+  width: 100%;
+}
+.modify-box {
+}
+.descriptionBox {
+  border: 1px solid #999;
+  height: 500px;
+  width: 60%;
+  overflow: scroll;
+  // text-align: center;
 }
 </style>
 

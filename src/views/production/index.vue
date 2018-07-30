@@ -13,7 +13,6 @@
                 <el-button size="mini" type="success" plain>修改产品</el-button>
                 <el-button size="mini" type="info" plain>删除产品</el-button>
                 <el-button size="mini" type="danger" plain>预览</el-button>
-                <el-button size="mini" type="primary" plain>新增类别</el-button>
             </el-col>
         </el-row>
   </div>
