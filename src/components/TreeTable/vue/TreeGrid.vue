@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-table v-loading='loading' :data="data" border :row-style="showTr" stripe size='mini' border @selection-change="handleSelectionChange" @sort-change='tableSort'>
+        <el-table v-loading='loading' :data="data" border :row-style="showTr"  :row-class-name="tableRowClassName" size='mini' border @selection-change="handleSelectionChange" @sort-change='tableSort'>
             <el-table-column type="selection" align="center" width="45"></el-table-column>
             <el-table-column :label="column.text" v-for="(column,index) in columns" :key="index" :prop="column.prop" :sortable='column.sort' :width="column.width?column.width:''" header-align='center' :align="column.textAlign" show-overflow-tooltip>
                 <template slot-scope="props">
@@ -10,6 +10,7 @@
                         <i v-if="props.row._expanded" class="el-icon-arrow-down" aria-hidden="true" @click="toggle(props.$index)"></i>
                     </template>
                     <span v-else-if="index===0" class="ms-tree-space"></span>
+                     {{ props.row[column.field] }}
                 </template>
             </el-table-column>
         </el-table>
@@ -128,6 +129,9 @@ export default {
         },
         tableSort(row) {
             let sortData = "";
+            if(!row.order){
+                return false;
+            }
             if (row.order == "descending") {
                 sortData = row.prop + " desc";
             } else {
@@ -135,6 +139,13 @@ export default {
             }
             // console.log(sortData)
             this.$emit("sort", sortData);
+        },
+        tableRowClassName({ row, rowIndex }) {
+            if (row.parentId == 0) {
+                return "contract-row";
+            }
+
+            return "";
         }
     }
 };
