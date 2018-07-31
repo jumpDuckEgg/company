@@ -10,7 +10,12 @@
                         <i v-if="props.row._expanded" class="el-icon-arrow-down" aria-hidden="true" @click="toggle(props.$index)"></i>
                     </template>
                     <span v-else-if="index===0" class="ms-tree-space"></span>
-                     {{ props.row[column.field] }}
+                    <template v-if="column.prop == 'content'||column.prop == 'picturePath'">
+                        <el-button type="small" @click="watchContent(props.row[column.field])">查看</el-button>
+                    </template>
+                    <template v-else>
+                        {{ props.row[column.field] }}
+                    </template>
                 </template>
             </el-table-column>
         </el-table>
@@ -144,8 +149,10 @@ export default {
             if (row.parentId == 0) {
                 return "contract-row";
             }
-
             return "";
+        },
+        watchContent(data){
+            this.$emit("wacthcontent", data);
         }
     }
 };

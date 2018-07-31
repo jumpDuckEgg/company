@@ -30,3 +30,10 @@ export function getType(data) {
         params: data
     })
 }
+export function getTypeById(data) {
+    return request({
+        url: '/dic_info/findById',
+        method: 'get',
+        params: data
+    })
+}

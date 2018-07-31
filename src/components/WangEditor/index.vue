@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <div ref="editor" style="text-align:left"></div>
-    </div>
+  <div>
+    <div ref="editor" style="text-align:left"></div>
+  </div>
 </template>
 
 <script>
@@ -18,16 +18,16 @@ export default {
   },
   data() {
     return {
-      editorContent: ""
+      editorContent: this.parentsContent,
+      editor:''
     };
   },
-  created() {
-    this.editorContent = this.parentsContent;
-  },
+  created() {},
   methods: {},
   mounted() {
     let url = SERVER.BASE_URL + "/file/upload?type=一般图片";
     var editor = new E(this.$refs.editor);
+    this.editor =editor;
     editor.customConfig.onchange = html => {
       this.editorContent = html;
     };
@@ -94,7 +94,7 @@ export default {
       }
     };
     editor.create();
-    editor.txt.html(this.parentsContent)
+    editor.txt.html(this.parentsContent);
   }
 };
 </script>
