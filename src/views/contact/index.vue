@@ -15,15 +15,15 @@
         </el-col>
       </el-row>
       <el-row class="content-box__item">
-        <el-col :span="8">
+        <el-col :span="6">
           <span class="content-box__item-title">系统logo：</span>
           <el-button type="small" @click="openImgDialog('logo')">查看</el-button>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <span class="content-box__item-title">专题图片：</span>
           <el-button type="small" @click="openImgDialog('pictureId')">查看</el-button>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <span class="content-box__item-title">微信二维码：</span>
           <el-button type="small" @click="openImgDialog('contactWechatPath')">查看</el-button>
         </el-col>
@@ -407,6 +407,8 @@ export default {
         padding: 10px;
         &-title {
             color: #999;
+            border-left: 5px solid #999999;
+            padding-left: 10px;
         }
     }
 }
@@ -416,11 +418,15 @@ export default {
 .modify-box {
 }
 .descriptionBox {
-    border: 1px solid #999;
+    border: 3px solid rgb(64, 158, 255);
+    margin-top: 10px;
+    padding: 20px;
+    border-radius: 10px;
     height: 500px;
-    width: 60%;
-    overflow: scroll;
+    width:80%;
+    overflow: auto;
     // text-align: center;
 }
+
 </style>
 

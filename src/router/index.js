@@ -59,18 +59,18 @@ export const constantRouterMap = [
       }
     ]
   },
-  {
-    path: '/home',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'home',
-        component: () => import('@/views/home/index'),
-        meta: { title: '首页配置', icon: 'form' }
-      }
-    ]
-  },
+  // {
+  //   path: '/home',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'home',
+  //       component: () => import('@/views/home/index'),
+  //       meta: { title: '首页配置', icon: 'form' }
+  //     }
+  //   ]
+  // },
   {
     path: '/type',
     component: Layout,
@@ -116,6 +116,18 @@ export const constantRouterMap = [
         name: 'contact',
         component: () => import('@/views/contact/index'),
         meta: { title: '联系我们配置', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/message',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'message',
+        component: () => import('@/views/message/index'),
+        meta: { title: '用户留言', icon: 'form' }
       }
     ]
   },

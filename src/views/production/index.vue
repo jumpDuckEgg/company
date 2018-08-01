@@ -40,7 +40,7 @@
                 <el-form-item label="产品图片:">
                     <upload ref="upload" v-bind="specialData" key="specialData" :materialfileList.sync='specialData.materialfileList' :buttonFlag.sync='specialData.buttonFlag'></upload>
                 </el-form-item>
-                <el-form-item label="内容:">
+                <el-form-item label="内容:" >
                     <wangEditor :parentsContent='form.content' ref="wangEditor" style="width:745px"></wangEditor>
                 </el-form-item>
             </el-form>
@@ -51,9 +51,9 @@
         </el-dialog>
         <el-dialog title="查看内容" :visible.sync="contentDialogVisible" width="600px" top="50px" center="" :close-on-click-modal='false'>
             <div class="showContent">
-                <div v-html="tempContent" v-if="tempFlag == 'content'"></div>
-                <div v-if="tempFlag == 'img'">
-                    <img :src="tempContent" alt="" style="width:600px">
+                <div v-html="tempContent" v-if="tempFlag == 'content'" class="descriptionBox"></div>
+                <div v-if="tempFlag == 'img'" class="descriptionBox">
+                    <img :src="tempContent" alt="" >
                 </div>
             </div>
         </el-dialog>
@@ -482,18 +482,30 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 .table-box {
     margin-top: 10px;
     max-width: 684px;
 }
 .showContent {
     height: 500px;
-    overflow: scroll;
+    /* overflow: scroll; */
 }
 .pagination-box {
     margin-top: 20px;
     margin-left: 200px;
+}
+.descriptionBox {
+    border: 3px solid rgb(64, 158, 255);
+    margin-top: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    height: 500px;
+    width:100%;
+    overflow: auto;
+    img{
+         width:500px
+    }
 }
 </style>
 
