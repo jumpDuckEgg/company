@@ -1,22 +1,22 @@
 <template>
-  <div class="upload">
-    <el-row class="material" justify type="flex">
-      <el-col>
-        <!-- <div v-show="imageUrl" class="avatarBox">
+    <div class="upload">
+        <el-row class="material" justify type="flex">
+            <el-col>
+                <!-- <div v-show="imageUrl" class="avatarBox">
           <img :src="imageUrl" class="avatar">
           <div class="del" @click="handledeleteFile">
             <i class="el-icon-delete deletbtn"></i>
           </div>
         </div> -->
-        <el-upload  ref="uploadImg" :action="materialUploadUrl" :headers="headData" :on-preview="handleMaterialPreview" :on-change='handleMaterialChange' :on-remove="handleMaterialRemove" :before-remove="MaterialbeforeRemove" :limit="limitFlieNumber" :on-success="handleMaterialSuccess" :file-list="materialfileList" :show-file-list="true" :before-upload="beforeMaterialUpload" :on-exceed="handleMaterialExceed" :on-progress="handleProgress" :on-error="handleError">
-          <!-- <i class="el-icon-plus avatar-uploader-icon"></i> -->
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
+                <el-upload ref="uploadImg" :action="materialUploadUrl" :headers="headData" :on-preview="handleMaterialPreview" :on-change='handleMaterialChange' :on-remove="handleMaterialRemove" :before-remove="MaterialbeforeRemove" :limit="limitFlieNumber" :on-success="handleMaterialSuccess" :file-list="materialfileList" :show-file-list="true" :before-upload="beforeMaterialUpload" :on-exceed="handleMaterialExceed" :on-progress="handleProgress" :on-error="handleError">
+                    <!-- <i class="el-icon-plus avatar-uploader-icon"></i> -->
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
 
-      </el-col>
-    </el-row>
-  </div>
+            </el-col>
+        </el-row>
+    </div>
 </template>
 
 <script>
@@ -81,21 +81,38 @@ export default {
             this.$emit("update:buttonFlag", false);
         },
         handleMaterialRemove(file, fileList) {
-            let ids = [];
-            ids.push(file.response.result);
-            this.$emit("update:buttonFlag", true);
-            deleteFile(ids)
-                .then(res => {
-                    if (res.success) {
-                        this.$emit("update:materialfileList", fileList);
-                        this.$emit("update:buttonFlag", false);
-                        this.imageUrl = '';
-                    } else {
-                        this.$emit("update:buttonFlag", false);
-                    }
+            this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            })
+                .then(() => {
+                    let ids = [];
+                    ids.push(file.response.result);
+                    this.$emit("update:buttonFlag", true);
+                    deleteFile(ids)
+                        .then(res => {
+                            if (res.success) {
+                                this.$emit("update:materialfileList", fileList);
+                                this.$emit("update:buttonFlag", false);
+                                this.imageUrl = "";
+                                this.$message({
+                                    type: "success",
+                                    message: "删除成功!"
+                                });
+                            } else {
+                                this.$emit("update:buttonFlag", false);
+                            }
+                        })
+                        .catch(() => {
+                            this.$emit("update:buttonFlag", false);
+                        });
                 })
                 .catch(() => {
-                    this.$emit("update:buttonFlag", false);
+                    this.$message({
+                        type: "info",
+                        message: "已取消删除"
+                    });
                 });
         },
         handleMaterialPreview(file) {
