@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       editorContent: this.parentsContent,
-      editor:''
+      editor: ""
     };
   },
   created() {},
@@ -27,7 +27,7 @@ export default {
   mounted() {
     let url = SERVER.BASE_URL + "/file/upload?type=一般图片";
     var editor = new E(this.$refs.editor);
-    this.editor =editor;
+    this.editor = editor;
     editor.customConfig.onchange = html => {
       this.editorContent = html;
     };
@@ -49,6 +49,23 @@ export default {
     editor.customConfig.uploadImgHooks = {
       before: function(xhr, editor, files) {
         console.log(files);
+        let file = files[0];
+        const isJPG = file.type === "image/jpeg" || file.type === "image/png";
+        const isLt2M = file.size / 1024 < 800;
+        if (!isJPG) {
+          alert("上传头像图片只能是 JPG或PNG 格式!");
+          return {
+            prevent: true,
+            msg: "放弃上传"
+          };
+        }
+        if (!isLt2M) {
+          alert("上传头像图片大小不能超过 800k!");
+          return {
+            prevent: true,
+            msg: "放弃上传"
+          };
+        }
         // 图片上传之前触发
         // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，files 是选择的图片文件
         // 如果返回的结果是 {prevent: true, msg: 'xxxx'} 则表示用户放弃上传
