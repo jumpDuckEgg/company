@@ -200,8 +200,8 @@ export default {
       let searchData = {};
       console.log(this.searchOptions);
       if (this.searchOptions.length == 1) {
-        searchData.type = 0;
-        searchData.subType = this.searchOptions[0];
+        searchData.type =this.searchOptions[0];
+        searchData.subType = 0;
       }
       if (this.searchOptions.length == 2) {
         searchData.type = this.searchOptions[0];
