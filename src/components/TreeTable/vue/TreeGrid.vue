@@ -1,27 +1,31 @@
 <template>
-    <div>
-        <el-table v-loading='loading' :data="data" border :row-style="showTr" :row-class-name="tableRowClassName" size='mini' border @selection-change="handleSelectionChange" @sort-change='tableSort'>
-            <el-table-column type="selection" align="center" width="45"></el-table-column>
-            <el-table-column :label="column.text" v-for="(column,index) in columns" :key="index" :prop="column.prop" :sortable='column.sort' :width="column.width?column.width:''" header-align='center' :align="column.textAlign" show-overflow-tooltip>
-                <template slot-scope="props">
-                    <span v-if="spaceIconShow(index)" v-for="(space, levelIndex) in props.row._level" :key='levelIndex' class="ms-tree-space"></span>
-                    <template v-if="toggleIconShow(index,props.row)">
-                        <i v-if="!props.row._expanded" class="el-icon-arrow-right" aria-hidden="true" @click="toggle(props.$index)"></i>
-                        <i v-if="props.row._expanded" class="el-icon-arrow-down" aria-hidden="true" @click="toggle(props.$index)"></i>
-                    </template>
-                    <span v-else-if="index===0" class="ms-tree-space"></span>
-                    <template v-if="column.prop == 'content'||column.prop == 'picturePath'">
-                        <el-button type="small" @click="watchContent(props.row[column.field])">查看</el-button>
-                    </template>
-                    <template v-else>
-                        {{ props.row[column.field] | filterStatus }}
-                    </template>
-                </template>
-            </el-table-column>
-        </el-table>
-    </div>
+  <div>
+    <el-table v-loading='loading' :data="data" border :row-style="showTr" :row-class-name="tableRowClassName" size='mini' border @selection-change="handleSelectionChange" @sort-change='tableSort'>
+      <el-table-column type="selection" align="center" width="45"></el-table-column>
+      <el-table-column :label="column.text" v-for="(column,index) in columns" :key="index" :prop="column.prop" :sortable='column.sort' :width="column.width?column.width:''" header-align='center' :align="column.textAlign" show-overflow-tooltip>
+        <template slot-scope="props">
+          <span v-if="spaceIconShow(index)" v-for="(space, levelIndex) in props.row._level" :key='levelIndex' class="ms-tree-space"></span>
+          <template v-if="toggleIconShow(index,props.row)">
+            <i v-if="!props.row._expanded" class="el-icon-arrow-right" aria-hidden="true" @click="toggle(props.$index)"></i>
+            <i v-if="props.row._expanded" class="el-icon-arrow-down" aria-hidden="true" @click="toggle(props.$index)"></i>
+          </template>
+          <span v-else-if="index===0" class="ms-tree-space"></span>
+          <template v-if="column.prop == 'content'">
+            <el-button type="small" @click="watchContent(props.row[column.field])">查看</el-button>
+          </template>
+          <template v-else-if="column.prop == 'picturePath'">
+            <img :key="props.row[column.field]" :src="SERVER.IMG_URL+props.row[column.field]" alt="" style="width:100px;height:50px" @click="watchContent(props.row[column.field])">
+          </template>
+          <template v-else>
+            {{ props.row[column.field] | filterStatus }}
+          </template>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 <script>
+import SERVER from "@/api/config";
 import Utils from "../utils/index.js";
 //  import Vue from 'vue'
 export default {
@@ -63,7 +67,9 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      SERVER: SERVER
+    };
   },
   computed: {
     // 格式化数据源
@@ -159,7 +165,7 @@ export default {
       if (row.parentId == 0) {
         return "contract-row";
       }
-      if (row.status == 'NotDull') {
+      if (row.status == "NotDull") {
         return "danger-row";
       }
       return "";

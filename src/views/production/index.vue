@@ -135,7 +135,7 @@ export default {
         {
           text: "产品图片",
           field: "picturePath",
-          width: "100",
+          width: "140",
           prop: "picturePath",
           sort: false,
           textAlign: "center"
@@ -200,7 +200,7 @@ export default {
       let searchData = {};
       console.log(this.searchOptions);
       if (this.searchOptions.length == 1) {
-        searchData.type =this.searchOptions[0];
+        searchData.type = this.searchOptions[0];
         searchData.subType = 0;
       }
       if (this.searchOptions.length == 2) {
@@ -280,7 +280,7 @@ export default {
     showContent(data) {
       if (typeof data == "number") {
         this.tempFlag = "img";
-        this.tempContent = SERVER.BASE_URL + "/file/get?id=" + data;
+        this.tempContent = SERVER.IMG_URL + data;
       } else {
         this.tempFlag = "content";
         this.tempContent = data;
@@ -307,17 +307,15 @@ export default {
         this.specialData.materialfileList = [];
         this.specialData.materialfileList.push({
           name: "产品图片",
-          url: SERVER.BASE_URL + "/file/get?id=" + data.picturePath,
+          url: SERVER.IMG_URL + data.picturePath,
           response: {
             result: data.picturePath
           }
         });
-        this.specialData.imgUrl =
-          SERVER.BASE_URL + "/file/get?id=" + data.picturePath;
+        this.specialData.imgUrl = SERVER.IMG_URL + data.picturePath;
 
         if (this.$refs.upload) {
-          this.$refs.upload.imageUrl =
-            SERVER.BASE_URL + "/file/get?id=" + data.picturePath;
+          this.$refs.upload.imageUrl = SERVER.IMG_URL + data.picturePath;
         }
         if (this.$refs.wangEditor) {
           this.$refs.wangEditor.editor.txt.html(data.content);
@@ -480,7 +478,7 @@ export default {
 <style lang='scss' scoped>
 .table-box {
   margin-top: 10px;
-  max-width: 684px;
+  max-width: 724px;
 }
 .showContent {
   height: 500px;

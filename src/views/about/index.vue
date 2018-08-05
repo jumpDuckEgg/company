@@ -1,46 +1,46 @@
 <template>
-    <div class="app-container">
-        <el-row type="flex" justify="start">
-            <el-col>
-                <el-button size="mini" type="success" plain @click="openModifyDialog">修改关于我们</el-button>
-            </el-col>
-        </el-row>
-        <div class="content-title">
-            关于我们配置
-        </div>
-        <el-row class="content-box__item">
-            <el-col :span="8">
-                <span class="content-box__item-title">专题图片：</span>
-                <el-button type="small" @click="openImgDialog()">查看</el-button>
-            </el-col>
-        </el-row>
-        <el-row class="content-box__item">
-            <el-col :span="24">
-                <span class="content-box__item-title">详细信息：</span>
-                <div class="descriptionBox">
-                    <div v-html="description"></div>
-                </div>
-            </el-col>
-        </el-row>
-        <el-dialog title="图片查看" :visible.sync="imgDialogVisible" center>
-            <img :src="templateImg" alt="" class="templateImg">
-        </el-dialog>
-        <el-dialog title="修改配置" :visible.sync="modifyDialogVisible" center top="40px" width="900px" :close-on-click-modal='false' @close='closeDialog'>
-            <div class="modify-box">
-                <el-form ref="form" :model="form" label-width="80px">
-                    <el-form-item label="专题图片:">
-                        <upload ref="upload" v-bind="specialData" key="specialData" :materialfileList.sync='specialData.materialfileList' :buttonFlag.sync='specialData.buttonFlag'></upload>
-                    </el-form-item>
-                    <el-form-item label="详细信息:">
-                        <wangEditor :parentsContent='form.description' ref="wangEditor" style="width:700px"></wangEditor>
-                    </el-form-item>
-                    <el-row style="text-align:center">
-                        <el-button :disabled=' specialData.buttonFlag' @click="submitInfo">提交</el-button>
-                    </el-row>
-                </el-form>
-            </div>
-        </el-dialog>
+  <div class="app-container">
+    <el-row type="flex" justify="start">
+      <el-col>
+        <el-button size="mini" type="success" plain @click="openModifyDialog">修改关于我们</el-button>
+      </el-col>
+    </el-row>
+    <div class="content-title">
+      关于我们配置
     </div>
+    <el-row class="content-box__item">
+      <el-col :span="8">
+        <span class="content-box__item-title">专题图片：</span>
+        <el-button type="small" @click="openImgDialog()">查看</el-button>
+      </el-col>
+    </el-row>
+    <el-row class="content-box__item">
+      <el-col :span="24">
+        <span class="content-box__item-title">详细信息：</span>
+        <div class="descriptionBox">
+          <div v-html="description"></div>
+        </div>
+      </el-col>
+    </el-row>
+    <el-dialog title="图片查看" :visible.sync="imgDialogVisible" center>
+      <img :src="templateImg" alt="" class="templateImg">
+    </el-dialog>
+    <el-dialog title="修改配置" :visible.sync="modifyDialogVisible" center top="40px" width="900px" :close-on-click-modal='false' @close='closeDialog'>
+      <div class="modify-box">
+        <el-form ref="form" :model="form" label-width="80px">
+          <el-form-item label="专题图片:">
+            <upload ref="upload" v-bind="specialData" key="specialData" :materialfileList.sync='specialData.materialfileList' :buttonFlag.sync='specialData.buttonFlag'></upload>
+          </el-form-item>
+          <el-form-item label="详细信息:">
+            <wangEditor :parentsContent='form.description' ref="wangEditor" style="width:700px"></wangEditor>
+          </el-form-item>
+          <el-row style="text-align:center">
+            <el-button :disabled=' specialData.buttonFlag' @click="submitInfo">提交</el-button>
+          </el-row>
+        </el-form>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -94,19 +94,19 @@ export default {
           if (res.result.pictureId != 0) {
             this.specialData.materialfileList.push({
               name: "专题图片",
-              url: SERVER.BASE_URL + "/file/get?id=" + res.result.pictureId,
+              url: SERVER.IMG_URL + res.result.pictureId,
               response: {
                 result: res.result.pictureId
               }
             });
             this.specialData.imgUrl =
-              SERVER.BASE_URL + "/file/get?id=" + res.result.pictureId;
+              SERVER.IMG_URL + res.result.pictureId;
             if (this.$refs.upload) {
               this.$refs.upload.imageUrl =
-                SERVER.BASE_URL + "/file/get?id=" + res.result.pictureId;
+                SERVER.IMG_URL + res.result.pictureId;
             }
             this.pictureId =
-              SERVER.BASE_URL + "/file/get?id=" + res.result.pictureId;
+              SERVER.IMG_URL + res.result.pictureId;
           }
         })
         .catch(err => {
@@ -173,17 +173,17 @@ export default {
   width: 100%;
 }
 .content-box {
-    width: 96%;
-    margin: 0 auto;
-    border-bottom: 0;
-    &__item {
-        padding: 10px;
-        &-title {
-            color: #999;
-            border-left: 5px solid #999999;
-            padding-left: 10px;
-        }
+  width: 96%;
+  margin: 0 auto;
+  border-bottom: 0;
+  &__item {
+    padding: 10px;
+    &-title {
+      color: #999;
+      border-left: 5px solid #999999;
+      padding-left: 10px;
     }
+  }
 }
 
 .descriptionBox {

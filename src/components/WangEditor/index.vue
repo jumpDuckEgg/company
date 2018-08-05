@@ -99,7 +99,7 @@ export default {
 
         // 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
         if (result.success) {
-          let url = SERVER.BASE_URL + "/file/get?id=" + result.result;
+          let url = SERVER.IMG_URL + result.result;
           insertImg(url);
         } else {
           this.$message({
