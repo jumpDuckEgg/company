@@ -246,10 +246,10 @@ export default {
               }
             });
             this.logoData.imgUrl =
-              SERVER.IMG_URL + res.result.logo;
+              SERVER.INFO_URL + res.result.logo;
             if (this.$refs.logoUpload) {
               this.$refs.logoUpload.imageUrl =
-                SERVER.IMG_URL + res.result.logo;
+                SERVER.INFO_URL + res.result.logo;
             }
             this.logo = res.result.logo;
           }
@@ -258,16 +258,16 @@ export default {
           if (res.result.pictureId != 0) {
             this.specialData.materialfileList.push({
               name: "专题图片",
-              url: SERVER.IMG_URL + res.result.pictureId,
+              url: SERVER.INFO_URL + res.result.pictureId,
               response: {
                 result: res.result.pictureId
               }
             });
             this.specialData.imgUrl =
-              SERVER.IMG_URL + res.result.pictureId;
+              SERVER.INFO_URL + res.result.pictureId;
             if (this.$refs.specialUpload) {
               this.$refs.specialUpload.imageUrl =
-                SERVER.IMG_URL + res.result.pictureId;
+                SERVER.INFO_URL + res.result.pictureId;
             }
             this.pictureId = res.result.pictureId;
           }
@@ -285,7 +285,7 @@ export default {
               }
             });
             this.wechatData.imgUrl =
-              SERVER.IMG_URL + res.result.contactWechatPath;
+              SERVER.INFO_URL + res.result.contactWechatPath;
             if (this.$refs.wechatUpload) {
               this.$refs.wechatUpload.imageUrl =
                 SERVER.BASE_URL +
@@ -305,14 +305,14 @@ export default {
 
     openImgDialog(type) {
       if (type == "logo") {
-        this.templateImg = SERVER.IMG_URL + this.logo;
+        this.templateImg = SERVER.INFO_URL + this.logo;
       }
       if (type == "pictureId") {
-        this.templateImg = SERVER.IMG_URL + this.pictureId;
+        this.templateImg = SERVER.INFO_URL + this.pictureId;
       }
       if (type == "contactWechatPath") {
         this.templateImg =
-          SERVER.IMG_URL + this.contactWechatPath;
+          SERVER.INFO_URL + this.contactWechatPath;
       }
       this.imgDialogVisible = true;
     },

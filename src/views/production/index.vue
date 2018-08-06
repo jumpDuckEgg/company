@@ -278,7 +278,7 @@ export default {
       this.multipleSelection = val;
     },
     showContent(data) {
-      if (typeof data == "number") {
+      if (data.indexOf("一般图片") !=-1) {
         this.tempFlag = "img";
         this.tempContent = SERVER.IMG_URL + data;
       } else {

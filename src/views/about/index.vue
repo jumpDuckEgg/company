@@ -94,19 +94,17 @@ export default {
           if (res.result.pictureId != 0) {
             this.specialData.materialfileList.push({
               name: "专题图片",
-              url: SERVER.IMG_URL + res.result.pictureId,
+              url: SERVER.INFO_URL + res.result.pictureId,
               response: {
                 result: res.result.pictureId
               }
             });
-            this.specialData.imgUrl =
-              SERVER.IMG_URL + res.result.pictureId;
+            this.specialData.imgUrl = SERVER.INFO_URL + res.result.pictureId;
             if (this.$refs.upload) {
               this.$refs.upload.imageUrl =
-                SERVER.IMG_URL + res.result.pictureId;
+                SERVER.INFO_URL + res.result.pictureId;
             }
-            this.pictureId =
-              SERVER.IMG_URL + res.result.pictureId;
+            this.pictureId = SERVER.INFO_URL + res.result.pictureId;
           }
         })
         .catch(err => {
