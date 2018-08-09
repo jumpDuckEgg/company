@@ -1,7 +1,7 @@
 <template>
     <div class="login-container">
         <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px" class="card-box login-form">
-            <h3 class="title">企业工厂</h3>
+            <h3 class="title">广州东正商业家具有限公司管理后台</h3>
             <el-form-item prop="username">
                 <span class="svg-container svg-container_login">
                     <svg-icon icon-class="user" />
@@ -28,7 +28,7 @@
 
             <div class="tips">
                <el-tooltip class="item" effect="dark" content="最佳分辨率1920x1080" placement="bottom">
-                <span>啦啦啦~</span>
+                <span>智能企业管理</span>
                </el-tooltip>
             </div>
         </el-form>

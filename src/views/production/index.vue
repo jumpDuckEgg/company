@@ -309,7 +309,7 @@ export default {
           name: "产品图片",
           url: SERVER.IMG_URL + data.picturePath,
           response: {
-            result: data.picturePath
+            result: data.pictureId
           }
         });
         this.specialData.imgUrl = SERVER.IMG_URL + data.picturePath;
@@ -432,7 +432,7 @@ export default {
             let submitData = Object.assign({}, this.form);
             let specialData = this.specialData.materialfileList[0];
             if (this.specialData.materialfileList.length > 0) {
-              submitData.picturePath = specialData.response.result;
+              submitData.pictureId = specialData.response.result;
             }
             submitData.type = this.type;
             submitData.subType = this.subType;
@@ -452,8 +452,9 @@ export default {
             );
             let specialData = this.specialData.materialfileList[0];
             if (this.specialData.materialfileList.length > 0) {
-              submitData.picturePath = specialData.response.result;
+              submitData.pictureId = specialData.response.result;
             }
+            submitData.picturePath = '';
             submitData.type = this.type;
             submitData.subType = this.subType;
             submitData.content = this.$refs.wangEditor.editorContent;
