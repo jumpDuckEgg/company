@@ -454,7 +454,6 @@ export default {
             if (this.specialData.materialfileList.length > 0) {
               submitData.pictureId = specialData.response.result;
             }
-            submitData.picturePath = '';
             submitData.type = this.type;
             submitData.subType = this.subType;
             submitData.content = this.$refs.wangEditor.editorContent;
